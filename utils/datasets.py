@@ -72,16 +72,21 @@ def create_dataloader(path, imgsz, batch_size, stride, opt, hyp=None, augment=Fa
 
 class LoadImages:  # for inference
     def __init__(self, path, img_size=640):
-        p = str(Path(path))  # os-agnostic
-        p = os.path.abspath(p)  # absolute path
-        if '*' in p:
-            files = sorted(glob.glob(p))  # glob
-        elif os.path.isdir(p):
-            files = sorted(glob.glob(os.path.join(p, '*.*')))  # dir
-        elif os.path.isfile(p):
-            files = [p]  # files
+        if isinstance(path, list):
+            files = path
+        elif isinstance(path, str):
+            p = str(Path(path))  # os-agnostic
+            p = os.path.abspath(p)  # absolute path
+            if '*' in p:
+                files = sorted(glob.glob(p))  # glob
+            elif os.path.isdir(p):
+                files = sorted(glob.glob(os.path.join(p, '*.*')))  # dir
+            elif os.path.isfile(p):
+                files = [p]  # files
+            else:
+                raise Exception('ERROR: %s does not exist' % p)
         else:
-            raise Exception('ERROR: %s does not exist' % p)
+            raise Exception(f'ERROR: wrong input format {type(path)}')
 
         images = [x for x in files if os.path.splitext(x)[-1].lower() in img_formats]
         videos = [x for x in files if os.path.splitext(x)[-1].lower() in vid_formats]
