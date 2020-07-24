@@ -30,8 +30,8 @@ if __name__ == '__main__':
   agnostic_nms    = True
 
 
-  for conf_thres in [.02, .05, .1, .2, .3, .4, .5]:
-    for iou_thres in [.1, .2, .3, .4, .5, .6, .7]:
+  for conf_thres in np.arange(1, 10) / 20:
+    for iou_thres in np.arange(1, 8) / 10:
       with torch.no_grad():
         # Initialize
         device = torch_utils.select_device('')
@@ -131,5 +131,5 @@ if __name__ == '__main__':
 
         print(msg)
 
-        with open(f'det/{project}-iou-{iou_thres}-thresh-{conf_thres}.txt', 'a') as f:
+        with open(f'det/{project}-yolo.txt', 'a') as f:
           f.write(f'iou-{iou_thres}-thresh-{conf_thres}: {msg}\n')
