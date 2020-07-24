@@ -129,5 +129,7 @@ if __name__ == '__main__':
         _eval = HIEval(gt, dt, 'bbox')
         msg, _ = _eval.new_summ()
 
+        print(msg)
+
         with open(f'det/{project}-iou-{iou_thres}-thresh-{conf_thres}.txt', 'a') as f:
           f.write(f'iou-{iou_thres}-thresh-{conf_thres}: {msg}\n')
