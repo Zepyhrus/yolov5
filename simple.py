@@ -417,7 +417,7 @@ if __name__ == '__main__':
   parser.add_argument('--data', type=str, default='data/coco128.yaml', help='data.yaml path')
   parser.add_argument('--hyp', type=str, default='', help='hyp.yaml path (optional)')
   parser.add_argument('--epochs', type=int, default=300)
-  parser.add_argument('--batch-size', '-b', type=int, default=16, help="Total batch size for all gpus.")
+  parser.add_argument('--batch-size', '-b', type=int, default=4, help="Total batch size for all gpus.")
   parser.add_argument('--img-size', nargs='+', type=int, default=[640, 640], help='train,test sizes')
   parser.add_argument('--rect', action='store_true', help='rectangular training')
   parser.add_argument('--resume', nargs='?', const='get_last', default=False,
@@ -440,6 +440,7 @@ if __name__ == '__main__':
   opt = parser.parse_args()
 
   last = get_latest_run() if opt.resume == 'get_last' else opt.resume  # resume from most recent run
+  
   if last and not opt.weights:
     print(f'Resuming training from {last}')
   opt.weights = last if opt.resume and not opt.weights else opt.weights
