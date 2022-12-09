@@ -629,5 +629,15 @@ def run(**kwargs):
 
 
 if __name__ == "__main__":
-    opt = parse_opt()
+    args = {
+        'data': 'coco128.yaml',
+        'imgsz': 640,
+        'weights': 'yolov5s.pt',
+        'epochs': 20,
+        'device': 0,
+    }
+
+    opt = parse_opt(True)
+    for k, v in args.items():
+        setattr(opt, k, v)
     main(opt)
