@@ -113,11 +113,14 @@ def parse_opt(known=False):
 
 if __name__ == "__main__":
     args = {
-        'data': 'coco128.yaml',
+        'data': 'aug.yaml',
         'imgsz': 640,
         'weights': 'yolov5s.pt',
-        'epochs': 5,
+        'epochs': 250,
         'device': 0,
+        # 'freeze': [20],
+        'optimizer': 'Adam',
+        'batch_size': 64,
     }
 
     opt = parse_opt(True)
