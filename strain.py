@@ -113,7 +113,7 @@ def parse_opt(known=False):
 
 if __name__ == "__main__":
     args = {
-        'data': 'aug.yaml',
+        'data': 'coco128.yaml',
         'imgsz': 640,
         'weights': 'yolov5s.pt',
         'epochs': 250,
