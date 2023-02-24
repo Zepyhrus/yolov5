@@ -10,24 +10,25 @@ from utils.general import (non_max_suppression, scale_boxes)
 from utils.torch_utils import select_device
 
 if __name__ == "__main__":
-    images =  ['data/asher/images/test/2.png'] 
+    dir_data = 'data/asher'
+    images =  glob(f'{dir_data}/*.png')
     print(len(images))
 
-    name = 'exp4'
+    name = 'exp2'
     weights = f'runs/train/{name}/weights/best.pt'
     nosave = False
     project = './runs/detect'
     exist_ok = True
     save_txt = True
     device = 'cuda:0'
-    data = './data/aug.yaml'
+    data = f'{dir_data}.yaml'
     dnn = False
     half = False
     imgsz = (640, 640)
     vid_stride = 1
     augment = False
-    conf_thres = 0.25
-    iou_thres = 0.25
+    conf_thres = 0.4
+    iou_thres = 0.3
     classes = None
     agnostic_nms = False
     save_crop = False
@@ -79,10 +80,8 @@ if __name__ == "__main__":
                     cx = int((xyxy[0] + xyxy[2]) / 2)
                     cy = int((xyxy[1] + xyxy[3]) / 2)
 
-                    if c:
-                        cv2.rectangle(im0s, (ulx, uly), (brx, bry), (0, 255, 0))
-                    else:
-                        cv2.circle(im0s, (cx, cy), 4, (0, 0, 255), line_thickness)
+                    cv2.rectangle(im0s, (ulx, uly), (brx, bry), (0, 255, 0))
+
 
         # Show results (image with detections)
         cv2.imshow('_', im0s)

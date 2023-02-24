@@ -113,12 +113,12 @@ def parse_opt(known=False):
 
 if __name__ == "__main__":
     args = {
-        'data': 'coco128.yaml',
+        'data': 'asher.yaml',
         'imgsz': 640,
         'weights': 'yolov5s.pt',
-        'epochs': 250,
+        'epochs': 100,
         'device': 0,
-        # 'freeze': [20],
+        'freeze': [20], # 冻结20及以后的网络
         'optimizer': 'Adam',
         'batch_size': 64,
     }
