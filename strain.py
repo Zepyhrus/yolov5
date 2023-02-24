@@ -116,9 +116,9 @@ if __name__ == "__main__":
         'data': 'asher.yaml',
         'imgsz': 640,
         'weights': 'yolov5s.pt',
-        'epochs': 100,
+        'epochs': 250,
         'device': 0,
-        'freeze': [20], # 冻结20及以后的网络
+        # 'freeze': [20], # 冻结20及以后的网络，冻结效果并不好
         'optimizer': 'Adam',
         'batch_size': 64,
     }

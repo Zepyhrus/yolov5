@@ -14,7 +14,7 @@ if __name__ == "__main__":
     images =  glob(f'{dir_data}/*.png')
     print(len(images))
 
-    name = 'exp2'
+    name = 'exp4'
     weights = f'runs/train/{name}/weights/best.pt'
     nosave = False
     project = './runs/detect'
@@ -27,8 +27,8 @@ if __name__ == "__main__":
     imgsz = (640, 640)
     vid_stride = 1
     augment = False
-    conf_thres = 0.4
-    iou_thres = 0.3
+    conf_thres = 0.5
+    iou_thres = 0.4
     classes = None
     agnostic_nms = False
     save_crop = False
