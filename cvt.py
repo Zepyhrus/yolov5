@@ -1,3 +1,5 @@
+from tqdm import tqdm
+
 import os, cv2, json, shutil, yaml, uuid
 import numpy as np, random
 from glob import glob
@@ -30,7 +32,7 @@ def cvt_labelme2yolov5(dir_data):
     os.makedirs(f'{dir_data}/labels/{idx}', exist_ok=True)
 
   # 将labelme格式数据转化为COCO格式
-  for label in labels: # json file
+  for label in tqdm(labels): # json file
     # 获取图片的iid
     iid, _ext = splitext(basename(label))
     image = f'{dir_data}/{iid}.png'
@@ -222,8 +224,7 @@ if __name__ == '__main__':
 
   assert len(images_n) and len(images_p), "No images available"
   
-  cnt = 0
-  while cnt < 500:
+  for _ in tqdm(range(500)):
     # 选择图片，生成随机背景
     image_n = random.choice(images_n)
     image_p = random.choice(images_p)
@@ -239,13 +240,10 @@ if __name__ == '__main__':
     with open(f'{dir_data}/labels/{tar}/{uid}.txt', 'w') as f:
       for rc, rcx, rcy, rbw, rbh in label:
         f.write(f'{int(rc)} {rcx:.6f} {rcy:.6f} {rbw:.6f} {rbh:.6f}\n')
-      cnt += 1
     
-    # 可视化以检查
-    for rc, rcx, rcy, rbw, rbh in label:
-      cv2.rectangle(img, (int((rcx-rbw/2)*w), int((rcy-rbh/2)*h)), (int((rcx+rbw/2)*w), int((rcy+rbh/2)*h)), (255, 0, 0) if rc else (0, 255, 255), 1)
-
-    cv2.imshow('_', cv2.resize(img, (640, 640)))
-    if cv2.waitKey(1) == 27: break
-    print(f'------- {cnt} ------')
+    # # 可视化以检查
+    # for rc, rcx, rcy, rbw, rbh in label:
+    #   cv2.rectangle(img, (int((rcx-rbw/2)*w), int((rcy-rbh/2)*h)), (int((rcx+rbw/2)*w), int((rcy+rbh/2)*h)), (255, 0, 0) if rc else (0, 255, 255), 1)
+    # cv2.imshow('_', cv2.resize(img, (320, 320)))
+    # if cv2.waitKey(1) == 27: break
 

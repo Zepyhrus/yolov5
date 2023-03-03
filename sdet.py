@@ -10,11 +10,11 @@ from utils.general import (non_max_suppression, scale_boxes)
 from utils.torch_utils import select_device
 
 if __name__ == "__main__":
-    dir_data = 'data/asher'
+    dir_data = 'data/tarball'
     images =  glob(f'{dir_data}/*.png')
     print(len(images))
 
-    name = 'exp4'
+    name = 'exp12'
     weights = f'runs/train/{name}/weights/best.pt'
     nosave = False
     project = './runs/detect'
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     data = f'{dir_data}.yaml'
     dnn = False
     half = False
-    imgsz = (640, 640)
+    imgsz = (320, 320)
     vid_stride = 1
     augment = False
     conf_thres = 0.5
@@ -49,7 +49,6 @@ if __name__ == "__main__":
     model.warmup(imgsz=(1, 3, *imgsz))  # warmup
     for image in images:
         im0s = cv2.imread(image)
-        # im0s = cv2.resize(im0s, (640, 640))
         im = im0s.transpose((2, 0, 1))
 
         im = torch.from_numpy(im).to(model.device)
