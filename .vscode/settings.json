@@ -1,0 +1,25 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "benchmarks.py": true,
+    ".pre-commit-config.yaml": true,
+    "CITATION.cff": true,
+    "CONTRIBUTING.md": true,
+    "classify": true,
+    // "*.pt": true,
+    "setup.cfg": true,
+    "LICENSE": true,
+    "train.py": true,
+    "tutorial.ipynb": true,
+    "val.py": true,
+    "export.py": true,
+    "detect.py": true,
+    "hubconf.py": true,
+    "**/__pycache__": true,
+  }
+}

@@ -1,15 +1,13 @@
-import yaml, os
+import os
 from os.path import join, basename
 import cv2
 
 from glob import glob
-
-
-from utils.general import yaml_load
+from urx.toolbox import yload
 
 if __name__ == '__main__':
   tar = 'asher'
-  cfg = yaml_load(f'data/{tar}.yaml')
+  cfg = yload(f'data/{tar}.yaml')
   images = sorted(glob(f'data/{tar}/{cfg["train"]}/*.png'))
   assert len(images), 'No images found!'
 

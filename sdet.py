@@ -10,21 +10,21 @@ from utils.general import (non_max_suppression, scale_boxes)
 from utils.torch_utils import select_device
 
 if __name__ == "__main__":
-    dir_data = 'data/tarball'
+    dir_data = 'data/asher'
     images =  glob(f'{dir_data}/*.png')
     print(len(images))
 
-    name = 'exp12'
+    name = 'asher20230315'
     weights = f'runs/train/{name}/weights/best.pt'
     nosave = False
     project = './runs/detect'
     exist_ok = True
     save_txt = True
-    device = 'cuda:0'
+    device = 'cpu'
     data = f'{dir_data}.yaml'
     dnn = False
     half = False
-    imgsz = (320, 320)
+    imgsz = (640, 640)
     vid_stride = 1
     augment = False
     conf_thres = 0.5

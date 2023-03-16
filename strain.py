@@ -92,7 +92,7 @@ def parse_opt(known=False):
     parser.add_argument('--sync-bn', action='store_true', help='use SyncBatchNorm, only available in DDP mode')
     parser.add_argument('--workers', type=int, default=8, help='max dataloader workers (per RANK in DDP mode)')
     parser.add_argument('--project', default=ROOT / 'runs/train', help='save to project/name')
-    parser.add_argument('--name', default='exp', help='save to project/name')
+    # parser.add_argument('--name', default='exp', help='save to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--quad', action='store_true', help='quad dataloader')
     parser.add_argument('--cos-lr', action='store_true', help='cosine LR scheduler')
@@ -114,13 +114,14 @@ def parse_opt(known=False):
 if __name__ == "__main__":
     args = {
         'data': 'asher.yaml',
+        'name': 'asher20230315',
         'imgsz': 640,
-        'weights': 'yolov5s.pt',
+        'weights': 'yolov5m.pt',
         'epochs': 250,
         'device': 0,
         # 'freeze': [20], # 冻结20及以后的网络，冻结效果并不好
         'optimizer': 'Adam',
-        'batch_size': 64,
+        'batch_size': 32,
     }
 
     opt = parse_opt(True)
