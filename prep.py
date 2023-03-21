@@ -1,4 +1,4 @@
-import os
+import os, shutil
 from glob import glob
 from tqdm import tqdm
 
@@ -11,18 +11,40 @@ from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
 from urx.toolbox import jload, jdump, yload
 
 
-if __name__ == '__main__':
-  prj = 'asher'
+# 将所有图像收集到一起
+def reorg():
+  labels = glob('data/asher_b/*.json')
+  import random
+  random.seed(98)
+  random.shuffle(labels)
+
+  for i, label in enumerate(labels):
+    lb = jload(label)
+    image_source = f'data/asher_b/{lb["imagePath"]}'
+    z = str(i).zfill(8)
+
+    image_tar = f'data/asher/{z}.png'
+    lable_tar = f'data/asher/{z}.json'
+
+    lb['imagePath'] = z + '.png'
+
+    shutil.copy(image_source, image_tar)
+    jdump(lable_tar, lb)
+
+
+
+def offline_augmentation(prj, aug_ratio=3, save=True):
   cfg = yload(f'data/{prj}.yaml')
   classes = {}
   for k, v in cfg['names'].items():
     classes[v] = k
-  save = True
+  
+  # 收集正样本
   images_p = glob(f'data/{prj}/*.png')
   images_n = glob(f'/media/ubuntu/Sherk2T/Datasets/COCO/2017/train2017/*.jpg')
   start = len(images_p)
   labels = glob(f'data/{prj}/*.json')
-  augsize = 3 * start # 按照样本数据的3倍进行增强
+  augsize = aug_ratio * start # 按照样本数据的3倍进行增强
   ratio_bg = 0.3 # 背景增强
   ratio_split = 0.1 # train/val split
 
@@ -102,6 +124,16 @@ if __name__ == '__main__':
       cv2.imshow('_', img_show)
       k = cv2.waitKey(0)
       if k == 27: break
+
+
+
+
+
+if __name__ == '__main__':
+  prj = 'asher'
+  offline_augmentation(prj, 25)
+
+  
 
 
 

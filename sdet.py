@@ -14,7 +14,7 @@ if __name__ == "__main__":
     images =  glob(f'{dir_data}/*.png')
     print(len(images))
 
-    name = 'asher20230315'
+    name = 'asher202303202'
     weights = f'runs/train/{name}/weights/best.pt'
     nosave = False
     project = './runs/detect'

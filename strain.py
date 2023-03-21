@@ -114,7 +114,7 @@ def parse_opt(known=False):
 if __name__ == "__main__":
     args = {
         'data': 'asher.yaml',
-        'name': 'asher20230315',
+        'name': 'asher20230320',
         'imgsz': 640,
         'weights': 'yolov5m.pt',
         'epochs': 250,
