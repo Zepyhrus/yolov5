@@ -1,4 +1,5 @@
-import os, shutil
+from os.path import join, basename, splitext
+import os, shutil, copy
 from glob import glob
 from tqdm import tqdm
 
@@ -7,8 +8,25 @@ import cv2, numpy as np
 
 import imgaug.augmenters as iaa
 from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
+from imgaug.augmentables import Keypoint, KeypointsOnImage
 
 from urx.toolbox import jload, jdump, yload
+
+AUGSEQ = iaa.SomeOf(3, [
+  iaa.Multiply((0.7, 1.5)), # change brightness, doesn't affect BBs
+  iaa.Affine(
+    translate_percent=0.2,
+    scale=(0.7, 1.5),
+    rotate=(-180, 180),
+    shear=(-45, 45),
+  ),
+  iaa.Fliplr(0.25),
+  iaa.Flipud(0.25),
+  iaa.CoarseDropout(per_channel=True),
+  iaa.ChannelShuffle(0.25),
+  iaa.Sharpen(alpha=(0, 0.5)),
+  iaa.ElasticTransformation(alpha=15, sigma=3),
+])
 
 
 # 将所有图像收集到一起
@@ -48,21 +66,6 @@ def offline_augmentation(prj, aug_ratio=3, save=True):
   ratio_bg = 0.3 # 背景增强
   ratio_split = 0.1 # train/val split
 
-  seq = iaa.SomeOf(3, [
-    iaa.Multiply((0.7, 1.5)), # change brightness, doesn't affect BBs
-    iaa.Affine(
-      translate_percent=0.2,
-      scale=(0.7, 1.5),
-      rotate=(-180, 180),
-      shear=(-45, 45),
-    ),
-    iaa.Fliplr(0.25),
-    iaa.Flipud(0.25),
-    iaa.CoarseDropout(per_channel=True),
-    iaa.ChannelShuffle(0.25),
-    iaa.Sharpen(alpha=(0, 0.5)),
-  ])
-
   # TODO: 添加样本均衡
   for i in tqdm(range(augsize)):
     label = np.random.choice(labels)
@@ -81,10 +84,9 @@ def offline_augmentation(prj, aug_ratio=3, save=True):
       if y1 > y2: y1, y2 = y2, y1
       
       bbs.append(BoundingBox(x1, y1, x2, y2, label=shape['label']))
-
     bbs = BoundingBoxesOnImage(bbs, shape=img_ori.shape)
 
-    img, bbs = seq(image=img_ori, bounding_boxes=bbs)
+    img, bbs = AUGSEQ(image=img_ori, bounding_boxes=bbs)
     h, w, c = img.shape
     bbs = bbs.clip_out_of_image() # 注意如果bbs变换到图片外，会引起训练yolo warning
 
@@ -126,12 +128,107 @@ def offline_augmentation(prj, aug_ratio=3, save=True):
       if k == 27: break
 
 
-
-
-
 if __name__ == '__main__':
-  prj = 'asher'
-  offline_augmentation(prj, 25)
+  prj = 'tarball-seg'
+  aug_ratio = 50
+  save = True
+  itp_num = 16
+
+  cfg = yload(f'data/{prj}.yaml')
+  classes = {}
+  for k, v in cfg['names'].items():
+    classes[v] = k
+
+  labels = glob(f'data/{prj}/*.json')
+  # for label in tqdm(labels):
+  print(len(labels))
+  for j in tqdm(range(aug_ratio * len(labels))):
+    label = np.random.choice(labels)
+    lb = jload(label)
+    image = label.replace('.json', '.png')
+    img = cv2.imread(image)
+    img_show = img.copy()
+    h, w, *_ = img.shape
+
+
+    if len(lb['shapes']) > 1:
+      print("More than one label detected!")
+
+    lns = []
+    kps_all = []
+    kps = []
+    for shape in lb['shapes']:
+      x1, y1 = shape['points'][0]
+      x2, y2 = shape['points'][1]
+
+      a, b = (x2-x1)/2, (y2-y1)/2
+      xc, yc = (x2+x1)/2, (y2+y1)/2
+      theta = np.arange(itp_num) * 2*np.pi / itp_num
+
+      xs = (np.cos(theta)*a + xc)
+      ys = (np.sin(theta)*b + yc)
+      
+      for x, y in zip(xs, ys):
+        kps.append(Keypoint(x, y))
+      kps_all.append({'cls': shape['label'], 'len': itp_num})
+    kps = KeypointsOnImage(kps, shape=img.shape)
+
+    # 数据增强
+    img_aug, kps_aug = AUGSEQ(image=img, keypoints=kps)
+    img_show = kps_aug.draw_on_image(img_aug, size=4)
+
+
+    # 生成新的数据
+    tar = 'train' if np.random.random() > 0.1  else 'val'
+    tar_images_folder = f'data/{prj}/images/{tar}'
+    tar_labels_folder = f'data/{prj}/labels/{tar}'
+    os.makedirs(tar_images_folder, exist_ok=True)
+    os.makedirs(tar_labels_folder, exist_ok=True)
+
+
+    # 保存新数据
+    abname = 'a'+str(j).zfill(8)
+    image_tar = join(tar_images_folder, abname+'.png')
+    label_tar = join(tar_labels_folder, abname+'.txt')
+
+    st = 0
+    lns = []
+    for i in range(len(kps_all)):
+      cls = classes[kps_all[i]['cls']]
+      kp = kps_aug[st:st+kps_all[i]['len']]
+
+      cords = np.array([[_.x, _.y] for _ in kp])
+      cords[:, 0] /= w
+      cords[:, 1] /= h
+
+      ln = ' '.join([str(_) for _ in [cls]+cords.flatten().tolist()])
+      lns.append(ln)
+
+      st += kps_all[i]['len']
+
+    if save:
+      cv2.imwrite(image_tar, img_aug)
+      with open(label_tar, 'w') as f:
+        f.writelines(lns)
+    else:
+      cv2.imshow('_', img_show)
+      if cv2.waitKey(0) == 27: break
+
+
+
+
+
+
+    
+  
+  
+
+
+
+
+      
+  
+  
 
   
 

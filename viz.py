@@ -1,12 +1,14 @@
 import os
 from os.path import join, basename
-import cv2
+import cv2, numpy as np
 
 from glob import glob
-from urx.toolbox import yload
+from urx.toolbox import yload, rectangle
+from urx.constants import COLORS
 
 if __name__ == '__main__':
-  tar = 'asher'
+  tar = 'tarball-seg'
+  seg = 'seg' in tar
   cfg = yload(f'data/{tar}.yaml')
   images = sorted(glob(f'data/{tar}/{cfg["train"]}/*.png'))
   assert len(images), 'No images found!'
@@ -21,15 +23,24 @@ if __name__ == '__main__':
     with open(lfile, 'r') as f:
       labels = f.readlines()
 
-      for label in labels:
-        cls, cx, cy, tw, th = [float(_) for _ in label.split()]
-        lux = int((cx-tw/2) * w)
-        luy = int((cy-th/2) * h)
-        rbx = int((cx+tw/2) * w)
-        rby = int((cy+th/2) * h)
+      for j, label in enumerate(labels):
+        lbs = [_ for _ in label.split()]
+        cls = int(lbs[0])
+        color = COLORS[j % len(COLORS)]
+        if seg:
+          pts = np.array([float(_) for _ in lbs[1:]]).reshape((-1, 2))
+          pts[:, 0] *= w
+          pts[:, 1] *= h
 
-        cv2.rectangle(img, (lux, luy), (rbx, rby), (0, 255, 0))
+          cv2.drawContours(img, [pts[:, None, :].astype(np.int32)], 0, color=color, thickness=2)
+        else:
+          cx, cy, tw, th = [float(_) for _ in lbs[1:]]
+          lux = int((cx-tw/2) * w)
+          luy = int((cy-th/2) * h)
+          rbx = int((cx+tw/2) * w)
+          rby = int((cy+th/2) * h)
 
+          rectangle(img, (lux, luy, rbx, rby), color)
 
     cv2.imshow('_', img)
     if cv2.waitKey(0) == 27: break
