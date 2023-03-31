@@ -51,132 +51,32 @@ def reorg():
 
 
 
-def offline_augmentation(prj, aug_ratio=3, save=True):
-  cfg = yload(f'data/{prj}.yaml')
-  classes = {}
-  for k, v in cfg['names'].items():
-    classes[v] = k
-  
-  # 收集正样本
-  images_p = glob(f'data/{prj}/*.png')
-  images_n = glob(f'/media/ubuntu/Sherk2T/Datasets/COCO/2017/train2017/*.jpg')
-  start = len(images_p)
-  labels = glob(f'data/{prj}/*.json')
-  augsize = aug_ratio * start # 按照样本数据的3倍进行增强
-  ratio_bg = 0.3 # 背景增强
-  ratio_split = 0.1 # train/val split
-
-  # TODO: 添加样本均衡
-  for i in tqdm(range(augsize)):
-    label = np.random.choice(labels)
-    image_label = label.replace('.json', '.png')
-    lb = jload(label)
-    img_ori = cv2.imread(image_label)
-
-
-    bbs = []
-    for shape in lb['shapes']:
-      assert shape['shape_type'] == 'rectangle'
-
-      x1, y1 = shape['points'][0]
-      x2, y2 = shape['points'][1]
-      if x1 > x2: x1, x2 = x2, x1
-      if y1 > y2: y1, y2 = y2, y1
-      
-      bbs.append(BoundingBox(x1, y1, x2, y2, label=shape['label']))
-    bbs = BoundingBoxesOnImage(bbs, shape=img_ori.shape)
-
-    img, bbs = AUGSEQ(image=img_ori, bounding_boxes=bbs)
-    h, w, c = img.shape
-    bbs = bbs.clip_out_of_image() # 注意如果bbs变换到图片外，会引起训练yolo warning
-
-    if not len(bbs): continue
-
-    # 随机添加背景
-    r = np.random.random()
-    if r < ratio_bg:
-      img_n = cv2.imread(np.random.choice(images_n))
-      img_n = cv2.resize(img_n, (w, h))
-
-      img = r*img_n.astype(np.double) + (1-r)*img.astype(np.double)
-      img = img.astype(np.uint8)
-    
-    if save:
-      new_idx = 'a' + str(start + i).zfill(8) # a表示增强的图片
-
-      lb_txt = []
-      for bbox in bbs:
-        lb_line = f'{classes[bbox.label]} {bbox.center_x/w} {bbox.center_y/h} {bbox.width/w} {bbox.height/h}\n'
-        lb_txt.append(lb_line)
-      
-      tar = 'train' if np.random.rand() > ratio_split else 'val'
-      tar_images_folder = f'data/{prj}/images/{tar}'
-      tar_labels_folder = f'data/{prj}/labels/{tar}'
-
-      if not os.path.exists(tar_images_folder):
-        os.makedirs(tar_images_folder)
-      if not os.path.exists(tar_labels_folder):
-        os.makedirs(tar_labels_folder)
-
-      cv2.imwrite(f'{tar_images_folder}/{new_idx}.png', img)
-      with open(f'{tar_labels_folder}/{new_idx}.txt', 'w') as f:
-        f.writelines(lb_txt)
-    else:
-      img_show = bbs.draw_on_image(img)
-      cv2.imshow('_', img_show)
-      k = cv2.waitKey(0)
-      if k == 27: break
-
-
 if __name__ == '__main__':
-  prj = 'tarball-seg'
+  prj = 'asher'
+  seg = 'seg' in prj
   aug_ratio = 50
   save = True
-  itp_num = 16
+  itp_num = 16  # 插值点数
+  ratio_bg = 0.3
 
   cfg = yload(f'data/{prj}.yaml')
   classes = {}
   for k, v in cfg['names'].items():
     classes[v] = k
 
+  images_n = glob(f'/media/ubuntu/Sherk2T/Datasets/COCO/2017/train2017/*.jpg')
+  assert len(images_n), "No negative backgrounds found!"
   labels = glob(f'data/{prj}/*.json')
-  # for label in tqdm(labels):
+  imgs = [cv2.imread(_.replace('.json', '.png')) for _ in labels]
+  
+  
   print(len(labels))
   for j in tqdm(range(aug_ratio * len(labels))):
-    label = np.random.choice(labels)
+    # 准备数据
+    label = labels[j % len(labels)]
     lb = jload(label)
-    image = label.replace('.json', '.png')
-    img = cv2.imread(image)
-    img_show = img.copy()
+    img = imgs[j % len(labels)]
     h, w, *_ = img.shape
-
-
-    if len(lb['shapes']) > 1:
-      print("More than one label detected!")
-
-    lns = []
-    kps_all = []
-    kps = []
-    for shape in lb['shapes']:
-      x1, y1 = shape['points'][0]
-      x2, y2 = shape['points'][1]
-
-      a, b = (x2-x1)/2, (y2-y1)/2
-      xc, yc = (x2+x1)/2, (y2+y1)/2
-      theta = np.arange(itp_num) * 2*np.pi / itp_num
-
-      xs = (np.cos(theta)*a + xc)
-      ys = (np.sin(theta)*b + yc)
-      
-      for x, y in zip(xs, ys):
-        kps.append(Keypoint(x, y))
-      kps_all.append({'cls': shape['label'], 'len': itp_num})
-    kps = KeypointsOnImage(kps, shape=img.shape)
-
-    # 数据增强
-    img_aug, kps_aug = AUGSEQ(image=img, keypoints=kps)
-    img_show = kps_aug.draw_on_image(img_aug, size=4)
-
 
     # 生成新的数据
     tar = 'train' if np.random.random() > 0.1  else 'val'
@@ -191,26 +91,86 @@ if __name__ == '__main__':
     image_tar = join(tar_images_folder, abname+'.png')
     label_tar = join(tar_labels_folder, abname+'.txt')
 
-    st = 0
-    lns = []
-    for i in range(len(kps_all)):
-      cls = classes[kps_all[i]['cls']]
-      kp = kps_aug[st:st+kps_all[i]['len']]
+    # 随机添加背景
+    r = np.random.random()*0.7
+    if np.random.random() < ratio_bg:
+      img_n = cv2.imread(np.random.choice(images_n))
+      img_n = cv2.resize(img_n, (w, h))
 
-      cords = np.array([[_.x, _.y] for _ in kp])
-      cords[:, 0] /= w
-      cords[:, 1] /= h
+      img = r*img_n.astype(np.double) + (1-r)*img.astype(np.double)
+      img = img.astype(np.uint8)
 
-      ln = ' '.join([str(_) for _ in [cls]+cords.flatten().tolist()])
-      lns.append(ln)
+    if seg:
+      # ----------------------------- Seg ----------------------------------------
+      assert len(lb['shapes']) == 1, "#Labels must be less than 2 for seg!"
 
-      st += kps_all[i]['len']
+      kps_all = []
+      kps = []
+      for shape in lb['shapes']:
+        x1, y1 = shape['points'][0]
+        x2, y2 = shape['points'][1]
+
+        a, b = (x2-x1)/2, (y2-y1)/2
+        xc, yc = (x2+x1)/2, (y2+y1)/2
+        theta = np.arange(itp_num) * 2*np.pi / itp_num
+
+        xs = (np.cos(theta)*a + xc)
+        ys = (np.sin(theta)*b + yc)
+        
+        for x, y in zip(xs, ys):
+          kps.append(Keypoint(x, y))
+        kps_all.append({'cls': shape['label'], 'len': itp_num})
+      kps = KeypointsOnImage(kps, shape=img.shape)
+      kps.clip_out_of_image()
+
+      # 数据增强
+      img_aug, tar_aug = AUGSEQ(image=img, keypoints=kps)
+      tar_aug = tar_aug.clip_out_of_image() # 注意如果bbs变换到图片外，会引起训练yolo warning
+
+      # 保存数据
+      st = 0
+      lns = []
+      for i in range(len(kps_all)):
+        cls = classes[kps_all[i]['cls']]
+        kp = tar_aug[st:st+kps_all[i]['len']]
+
+        cords = np.array([[_.x, _.y] for _ in kp])
+        cords[:, 0] /= w
+        cords[:, 1] /= h
+
+        ln = ' '.join([str(_) for _ in [cls]+cords.flatten().tolist()]) + '\n'
+        lns.append(ln)
+
+        st += kps_all[i]['len']
+    else:
+      # ------------------------------------------- Bounding box ----------------------------------
+      bbs = []
+      for shape in lb['shapes']:
+        assert shape['shape_type'] == 'rectangle'
+
+        x1, y1 = shape['points'][0]
+        x2, y2 = shape['points'][1]
+        if x1 > x2: x1, x2 = x2, x1
+        if y1 > y2: y1, y2 = y2, y1
+        
+        bbs.append(BoundingBox(x1, y1, x2, y2, label=shape['label']))
+      bbs = BoundingBoxesOnImage(bbs, shape=img.shape)
+
+      img_aug, tar_aug = AUGSEQ(image=img, bounding_boxes=bbs)
+      tar_aug = tar_aug.clip_out_of_image() # 注意如果bbs变换到图片外，会引起训练yolo warning
+
+      # 保存数据
+      lns = []
+      for bbox in tar_aug:
+        ln = f'{classes[bbox.label]} {bbox.center_x/w} {bbox.center_y/h} {bbox.width/w} {bbox.height/h}' + '\n'
+        lns.append(ln)
 
     if save:
       cv2.imwrite(image_tar, img_aug)
-      with open(label_tar, 'w') as f:
-        f.writelines(lns)
+      with open(label_tar, 'w') as f: f.writelines(lns)
     else:
+      img_show = tar_aug.draw_on_image(img_aug, size=4)
+
       cv2.imshow('_', img_show)
       if cv2.waitKey(0) == 27: break
 
