@@ -476,3 +476,11 @@ For YOLOv5 bugs and feature requests please visit [GitHub Issues](https://github
 </div>
 
 [tta]: https://github.com/ultralytics/yolov5/issues/303
+
+
+
+## Sherk
+
+```bash
+python segment/train.py --img 128 --batch 320 --epochs 250 --data tarball-seg.yaml --weights yolov5n-seg.pt  --name tarball-seg  --exist-ok --optimizer Adam
+```

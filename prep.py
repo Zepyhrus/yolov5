@@ -52,7 +52,7 @@ def reorg():
 
 
 if __name__ == '__main__':
-  prj = 'asher'
+  prj = 'tarball-seg'
   seg = 'seg' in prj
   aug_ratio = 50
   save = True
@@ -121,11 +121,11 @@ if __name__ == '__main__':
           kps.append(Keypoint(x, y))
         kps_all.append({'cls': shape['label'], 'len': itp_num})
       kps = KeypointsOnImage(kps, shape=img.shape)
-      kps.clip_out_of_image()
+      # kps = kps.clip_out_of_image()
 
       # 数据增强
       img_aug, tar_aug = AUGSEQ(image=img, keypoints=kps)
-      tar_aug = tar_aug.clip_out_of_image() # 注意如果bbs变换到图片外，会引起训练yolo warning
+      # tar_aug = tar_aug.clip_out_of_image() # 注意如果bbs变换到图片外，会引起训练yolo warning
 
       # 保存数据
       st = 0

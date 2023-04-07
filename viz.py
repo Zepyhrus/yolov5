@@ -7,7 +7,7 @@ from urx.toolbox import yload, rectangle
 from urx.constants import COLORS
 
 if __name__ == '__main__':
-  tar = 'asher'
+  tar = 'tarball-seg'
   seg = 'seg' in tar
   cfg = yload(f'data/{tar}.yaml')
   images = sorted(glob(f'data/{tar}/{cfg["train"]}/*.png'))
