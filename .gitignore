@@ -5,6 +5,7 @@ data/coco128
 data/tarball
 data/tarball-seg
 data/coco128-seg
+data/tbc
 runs/*
 backup
 *.pt

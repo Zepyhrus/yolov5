@@ -482,5 +482,10 @@ For YOLOv5 bugs and feature requests please visit [GitHub Issues](https://github
 ## Sherk
 
 ```bash
-python segment/train.py --img 128 --batch 320 --epochs 250 --data tarball-seg.yaml --weights yolov5n-seg.pt  --name tarball-seg  --exist-ok --optimizer Adam
+# batch 160 consumes 1.63G GPU, around 110s, 
+python segment/train.py --img 128 --batch 320 --epochs 1000 --data tarball-seg.yaml --weights yolov5n-seg.pt  --name tarball-seg  --optimizer AdamW --cos-lr --patience 0
 ```
+
+
+
+
