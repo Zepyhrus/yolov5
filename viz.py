@@ -3,13 +3,13 @@ from os.path import join, basename
 import cv2, numpy as np
 
 from glob import glob
-from urx.toolbox import yload, rectangle
+from urx.toolbox import sload, rectangle
 from urx.constants import COLORS
 
 if __name__ == '__main__':
-  tar = 'tbc'
+  tar = 'tarball-seg256'
   seg = 'seg' in tar
-  cfg = yload(f'data/{tar}.yaml')
+  cfg = sload(f'data/{tar}.yaml')
   images = sorted(glob(f'data/{tar}/{cfg["train"]}/*.png'))
   assert len(images), 'No images found!'
 

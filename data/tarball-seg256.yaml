@@ -1,0 +1,10 @@
+path: data/tarball-seg256
+train: images/train
+val: images/val
+names:
+  0: tarball
+  1: chessboard
+  2: arucoboard
+  3: nbwl
+  4: side
+  5: top

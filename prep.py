@@ -31,7 +31,7 @@ AUGSEQ = iaa.SomeOf(3, [
 
 
 if __name__ == '__main__':
-  prj = 'tarball-seg'
+  prj = 'tarball-seg256'
   seg = 'seg' in prj
   aug_ratio = 20 if seg else 100
   save = True

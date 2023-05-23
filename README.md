@@ -483,7 +483,7 @@ For YOLOv5 bugs and feature requests please visit [GitHub Issues](https://github
 
 ```bash
 # batch 160 consumes 1.63G GPU, around 110s, 
-python segment/train.py --img 128 --batch 320 --epochs 1000 --data tarball-seg.yaml --weights yolov5n-seg.pt  --name tarball-seg  --optimizer AdamW --cos-lr --patience 0
+python segment/train.py --img 256 --batch 320 --epochs 1000 --data tarball-seg256.yaml --weights yolov5n-seg.pt  --name tarball-seg  --optimizer AdamW --cos-lr
 ```
 
 
