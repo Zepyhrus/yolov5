@@ -31,9 +31,9 @@ AUGSEQ = iaa.SomeOf(3, [
 
 
 if __name__ == '__main__':
-  prj = 'tarball-seg256'
+  prj = 'asher'
   seg = 'seg' in prj
-  aug_ratio = 20 if seg else 100
+  aug_ratio = 20 if seg else 20
   save = True
   itp_num = 32  # 对圆的插值点数
   ratio_bg = 0.25
@@ -47,15 +47,15 @@ if __name__ == '__main__':
   assert len(images_n), "No negative backgrounds found!"
   labels = glob(f'data/{prj}/*.json')
   random.shuffle(labels)
-  imgs = [cv2.imread(_.replace('.json', '.png')) for _ in labels]
+  # imgs = [cv2.imread(_.replace('.json', '.png')) for _ in labels]
   
   
   print(len(labels))
   for j in tqdm(range(aug_ratio * len(labels))):
     # 准备数据
-    label = labels[j % len(labels)]
+    label = random.choice(labels)
     lb = sload(label)
-    img = imgs[j % len(labels)]
+    img = cv2.imread(label.replace('.json', '.png'))
     h, w, *_ = img.shape
 
     # 生成新的数据

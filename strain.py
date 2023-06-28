@@ -112,18 +112,33 @@ def parse_opt(known=False):
     return parser.parse_known_args()[0] if known else parser.parse_args()
 
 if __name__ == "__main__":
+    # args = {
+    #   'data': 'tbc.yaml',
+    #   'name': 'tbc',
+    #   'imgsz': 128,
+    #   'weights': 'yolov5n.pt',
+    #   'epochs': 2000,
+    #   'device': 0,
+    #   # 'freeze': [20], # 冻结20及以后的网络，冻结效果并不好
+    #   'optimizer': 'AdamW',
+    #   'batch_size': 640,
+    #   'single_cls': True,
+    #   'cos_lr': True,
+    # }
     args = {
-      'data': 'tbc.yaml',
-      'name': 'tbc',
-      'imgsz': 128,
-      'weights': 'yolov5n.pt',
-      'epochs': 2000,
+      'data': 'asher.yaml',
+      'name': 'asher',
+      'imgsz': 640,
+      'weights': 'runs/train/asher20230526/weights/best.pt', # 'yolov5s.pt',
+      'epochs': 500,
       'device': 0,
       # 'freeze': [20], # 冻结20及以后的网络，冻结效果并不好
       'optimizer': 'AdamW',
-      'batch_size': 640,
-      'single_cls': True,
-      'cos_lr': True,
+      'batch_size': 32,
+      'single_cls': False,
+      # 'resume': False,
+      'cos_lr': False,
+      # 'patience': 0,
     }
 
     opt = parse_opt(True)

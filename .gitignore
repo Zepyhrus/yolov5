@@ -4,6 +4,7 @@ data/asher
 data/coco128
 data/tarball
 data/tarball-seg
+data/tarball-seg256
 data/coco128-seg
 data/tbc
 runs/*

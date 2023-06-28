@@ -483,8 +483,19 @@ For YOLOv5 bugs and feature requests please visit [GitHub Issues](https://github
 
 ```bash
 # batch 160 consumes 1.63G GPU, around 110s, 
-python segment/train.py --img 256 --batch 320 --epochs 1000 --data tarball-seg256.yaml --weights yolov5n-seg.pt  --name tarball-seg  --optimizer AdamW --cos-lr
+python segment/train.py --img 256 --batch 320 --epochs 1000 --data tarball-seg256.yaml --weights yolov5n-seg.pt  --name tarball-seg256  --optimizer AdamW --cos-lr
+
+python segment/train.py --img 128 --batch 320 --epochs 1000 --data tarball-seg.yaml --weights runs/train-seg/tarball-seg2/weights/best.pt --name tarball-seg  --optimizer AdamW 
 ```
+
+### 1. 数据增强
+
+1. 超过20倍的离线增强没有意义，反而会导致数据失真；
+
+### 2. 训练记录
+
+1. 通常来说250个epoch不能够获得最好的模型，500比较理想；
+2. `cos_lr` 可以加速收敛，但是会在训练过程的后面导致不稳定；
 
 
 
