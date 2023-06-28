@@ -1,0 +1,26 @@
+{
+  "version": "5.1.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "chessboard",
+      "points": [
+        [
+          176.90298507462686,
+          30.298507462686587
+        ],
+        [
+          607.5,
+          416.11940298507466
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "00000013.png",
+  "imageData": null,
+  "imageHeight": 480,
+  "imageWidth": 640
+}

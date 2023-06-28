@@ -1,0 +1,26 @@
+{
+  "version": "5.1.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "nbwl",
+      "points": [
+        [
+          437.76923076923083,
+          337.3846153846154
+        ],
+        [
+          642.3846153846154,
+          625.0769230769231
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "00000136.png",
+  "imageData": null,
+  "imageHeight": 1024,
+  "imageWidth": 1024
+}

@@ -1,0 +1,106 @@
+{
+  "version": "5.1.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "tarball",
+      "points": [
+        [
+          388.13432835820896,
+          515.8208955223881
+        ],
+        [
+          430.6716417910448,
+          556.8656716417911
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          670.223880597015,
+          500.1492537313433
+        ],
+        [
+          717.9850746268656,
+          543.4328358208955
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          801.5671641791045,
+          534.4776119402985
+        ],
+        [
+          835.1492537313433,
+          571.7910447761194
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          400.82089552238807,
+          772.5373134328358
+        ],
+        [
+          441.86567164179104,
+          810.5970149253732
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          745.5970149253732,
+          772.5373134328358
+        ],
+        [
+          791.865671641791,
+          817.3134328358209
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          782.9104477611941,
+          752.3880597014926
+        ],
+        [
+          814.2537313432836,
+          783.7313432835821
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "00000059.png",
+  "imageData": null,
+  "imageHeight": 960,
+  "imageWidth": 1280
+}

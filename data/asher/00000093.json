@@ -1,0 +1,138 @@
+{
+  "version": "5.1.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "nbwl",
+      "points": [
+        [
+          429.80303030303025,
+          357.8333333333333
+        ],
+        [
+          786.6212121212121,
+          683.5909090909091
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          465.4090909090909,
+          501.77272727272725
+        ],
+        [
+          494.9545454545455,
+          529.8030303030303
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          501.0151515151515,
+          601.7727272727273
+        ],
+        [
+          527.530303030303,
+          631.3181818181818
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          522.2272727272727,
+          540.4090909090909
+        ],
+        [
+          538.8939393939394,
+          561.6212121212121
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          642.6818181818181,
+          435.8636363636364
+        ],
+        [
+          656.3181818181818,
+          454.04545454545456
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          713.8939393939394,
+          413.8939393939394
+        ],
+        [
+          733.5909090909091,
+          438.8939393939394
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          658.5714285714286,
+          490.57142857142856
+        ],
+        [
+          674.5714285714286,
+          506.57142857142856
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          689.7142857142857,
+          605.1428571428571
+        ],
+        [
+          714.2857142857143,
+          632.5714285714286
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "00000093.png",
+  "imageData": null,
+  "imageHeight": 1024,
+  "imageWidth": 1024
+}

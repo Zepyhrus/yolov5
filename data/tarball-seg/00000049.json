@@ -1,0 +1,26 @@
+{
+  "flags": {},
+  "imageData": null,
+  "imageHeight": 320,
+  "imagePath": "00000049.png",
+  "imageWidth": 320,
+  "shapes": [
+    {
+      "flags": {},
+      "group_id": null,
+      "label": "tarball",
+      "points": [
+        [
+          29.824481201171874,
+          29.697848510742187
+        ],
+        [
+          94.64076538085938,
+          100.84693603515625
+        ]
+      ],
+      "shape_type": "rectangle"
+    }
+  ],
+  "version": "5.1.1"
+}

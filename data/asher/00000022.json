@@ -1,0 +1,106 @@
+{
+  "version": "5.1.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "tarball",
+      "points": [
+        [
+          459.7761194029851,
+          509.10447761194024
+        ],
+        [
+          496.34328358208955,
+          543.4328358208955
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          725.4477611940298,
+          503.13432835820896
+        ],
+        [
+          763.5074626865671,
+          542.6865671641791
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          888.1343283582089,
+          544.179104477612
+        ],
+        [
+          920.9701492537313,
+          579.2537313432837
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          757.5373134328358,
+          774.7761194029852
+        ],
+        [
+          804.5522388059701,
+          819.5522388059702
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          445.5970149253731,
+          750.1492537313433
+        ],
+        [
+          486.64179104477614,
+          793.4328358208955
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "tarball",
+      "points": [
+        [
+          858.2835820895522,
+          756.8656716417911
+        ],
+        [
+          899.3283582089553,
+          797.9104477611941
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "00000022.png",
+  "imageData": null,
+  "imageHeight": 960,
+  "imageWidth": 1280
+}

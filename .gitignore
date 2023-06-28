@@ -3,12 +3,22 @@ __pycache__/
 *$py.class
 
 
-data/asher
+data/asher/images
+data/asher/labels
+
 data/coco128
-data/tarball
-data/tarball-seg
-data/tarball-seg256
+
+data/tarball/images
+data/tarball/labels
+
+data/tarball-seg/images
+data/tarball-seg/labels
+
+data/tarball-seg256/images
+data/tarball-seg256/labels
+
 data/coco128-seg
+
 data/tbc
 runs/*
 backup
