@@ -127,7 +127,7 @@ if __name__ == "__main__":
     # }
     args = {
       'data': 'asher.yaml',
-      'name': 'asher',
+      'name': 'asher20230628',
       'imgsz': 640,
       'weights': 'runs/train/asher20230526/weights/best.pt', # 'yolov5s.pt',
       'epochs': 500,
