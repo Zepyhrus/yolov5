@@ -3,21 +3,32 @@ from glob import glob
 import cv2
 
 from urx.toolbox import sload, sdump
+from urx.imgbox import rectangle, square_n_pad
 
-labels = glob('data/tarball-seg256/*.json')
-images = glob('data/tarball-seg256/*.json')
+start0 = 155
+start = 409
 
-for label in tqdm(labels):
-  # 处理图片
-  image = label.replace('.json', '.png')
-  img = cv2.imread(image)
-  img = cv2.resize(img, (256, 256))
-  cv2.imwrite(image, img)
 
-  # 处理标签
-  lb = sload(label)
-  for i in range(len(lb['shapes'])):
-    for j in range(len(lb['shapes'][i]['points'])):
-      lb['shapes'][i]['points'][j][0] *= 2
-      lb['shapes'][i]['points'][j][1] *= 2
-  sdump(label, lb)
+
+while True:
+  lb = sload(f'data/asher/00000{start0}.json')
+  img = cv2.imread(f'data/asher/00000{start0}.png')
+
+
+  for shape in lb['shapes']:
+    if shape['label'] != 'tarball': pass
+    box = shape['points'][0] + shape['points'][1]
+
+    img_sq, box_sq = square_n_pad(box, img)
+    img_sq = cv2.resize(img_sq, (128, 128))
+
+    cv2.imwrite(f'data/tarball-seg/00000{start}.png', img_sq)
+    start += 1
+    # if cv2.waitKey(0) == 27:
+    #   raise Exception('Break manually...')
+    
+
+  start0 += 1
+  
+
+
