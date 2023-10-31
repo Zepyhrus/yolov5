@@ -3,7 +3,8 @@ from os.path import join, basename
 import cv2, numpy as np
 
 from glob import glob
-from urx.toolbox import sload, rectangle
+from urx.toolbox import sload
+from urx.imgbox import rectangle
 from urx.constants import COLORS
 
 if __name__ == '__main__':
