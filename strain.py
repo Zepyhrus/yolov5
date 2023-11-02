@@ -127,10 +127,11 @@ if __name__ == "__main__":
     # }
     args = {
       'data': 'asher.yaml',
-      'name': 'asher20230628',
+      'name': 'asher231101',
       'imgsz': 640,
-      'weights': 'runs/train/asher20230526/weights/best.pt', # 'yolov5s.pt',
-      'epochs': 500,
+    #   'weights': 'runs/train/asher20230828/weights/best.pt', # 'yolov5s.pt',
+      'weights': 'yolov5s.pt',
+      'epochs': 1000,
       'device': 0,
       # 'freeze': [20], # 冻结20及以后的网络，冻结效果并不好
       'optimizer': 'AdamW',

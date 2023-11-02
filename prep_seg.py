@@ -34,8 +34,8 @@ AUGSEQ = iaa.SomeOf(3, [
 if __name__ == '__main__':
   prj = 'tarball-seg256'
   seg = True
-  aug_ratio = 0.1
-  save = False
+  aug_ratio = 10
+  save = True
   itp_num = 32  # 对圆的插值点数
   ratio_bg = 0.25
 
@@ -106,7 +106,7 @@ if __name__ == '__main__':
 
         xs = (np.cos(theta)*a + xc)
         ys = (np.sin(theta)*b + yc)
-      elif shape['label'] in ['side', 'top']: # tbar的多边形mask
+      elif shape['label'] in ['side', 'top', 'body', 'upper']: # tbar的多边形mask
         xs = [_[0] for _ in shape['points']]
         ys = [_[1] for _ in shape['points']]
       else:

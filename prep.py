@@ -33,7 +33,7 @@ AUGSEQ = iaa.SomeOf(3, [
 
 if __name__ == '__main__':
   prj = 'asher'
-  seg = 'seg' in prj
+  seg = False
   aug_ratio = 20
   save = True
   itp_num = 32  # 对圆的插值点数
@@ -51,9 +51,9 @@ if __name__ == '__main__':
   random.shuffle(labels)
   # imgs = [cv2.imread(_.replace('.json', '.png')) for _ in labels]
   
-  
+  steps = int(aug_ratio * len(labels))
   print(len(labels))
-  for j in tqdm(range(aug_ratio * len(labels))):
+  for j in tqdm(range(steps)):
     # 准备数据
     label = random.choice(labels)
     # if not '0000040' in label: continue # 筛选想看的图片
@@ -83,81 +83,27 @@ if __name__ == '__main__':
       img = r*img_n.astype(np.double) + (1-r)*img.astype(np.double)
       img = img.astype(np.uint8)
 
-    if seg:
-      # ----------------------------- Seg ----------------------------------------
-      kps_all = []
-      kps = []
-      for shape in lb['shapes']:
-        if shape['label'] == 'tarball': # tarball的球形插值
-          if shape['shape_type'] == 'rectangle':
-            x1, y1 = shape['points'][0]
-            x2, y2 = shape['points'][1]
+    # ------------------------------------------- Bounding box ----------------------------------
+    bbs = []
+    for shape in lb['shapes']:
+      assert shape['shape_type'] == 'rectangle'
 
-            a, b = (x2-x1)/2, (y2-y1)/2
-            xc, yc = (x2+x1)/2, (y2+y1)/2
-          elif shape['shape_type'] == 'circle':
-            xc, yc = shape['points'][0]
-            xt, yt = shape['points'][1]
-            a = b = np.sqrt((xt-xc)**2+(yt-yc)**2)
-          else:
-            raise Exception(f'Wrong shape type {shape["shape_type"]}')
-          theta = np.arange(itp_num) * 2*np.pi / itp_num
+      x1, y1 = shape['points'][0]
+      x2, y2 = shape['points'][1]
+      if x1 > x2: x1, x2 = x2, x1
+      if y1 > y2: y1, y2 = y2, y1
+      
+      bbs.append(BoundingBox(x1, y1, x2, y2, label=shape['label']))
+    bbs = BoundingBoxesOnImage(bbs, shape=img.shape)
 
-          xs = (np.cos(theta)*a + xc)
-          ys = (np.sin(theta)*b + yc)
-        elif shape['label'] in ['side', 'top']: # tbar的多边形mask
-          xs = [_[0] for _ in shape['points']]
-          ys = [_[1] for _ in shape['points']]
-        else:
-          raise Exception(f'Not supported label: {shape["label"]}')
+    img_aug, tar_aug = AUGSEQ(image=img, bounding_boxes=bbs)
+    tar_aug = tar_aug.clip_out_of_image() # 注意如果bbs变换到图片外，会引起训练yolo warning
 
-        for x, y in zip(xs, ys):
-          kps.append(Keypoint(x, y))
-        kps_all.append({'cls': shape['label'], 'len': len(xs)})
-      kps = KeypointsOnImage(kps, shape=img.shape)
-      # kps = kps.clip_out_of_image()
-
-      # 数据增强
-      img_aug, tar_aug = AUGSEQ(image=img, keypoints=kps)
-      # tar_aug = tar_aug.clip_out_of_image() # 注意如果bbs变换到图片外，会引起训练yolo warning
-
-      # 保存数据
-      st = 0
-      lns = []
-      for i in range(len(kps_all)):
-        cls = classes[kps_all[i]['cls']]
-        kp = tar_aug[st:st+kps_all[i]['len']]
-
-        cords = np.array([[_.x, _.y] for _ in kp])
-        cords[:, 0] /= w
-        cords[:, 1] /= h
-
-        ln = ' '.join([str(_) for _ in [cls]+cords.flatten().tolist()]) + '\n'
-        lns.append(ln)
-
-        st += kps_all[i]['len']
-    else:
-      # ------------------------------------------- Bounding box ----------------------------------
-      bbs = []
-      for shape in lb['shapes']:
-        assert shape['shape_type'] == 'rectangle'
-
-        x1, y1 = shape['points'][0]
-        x2, y2 = shape['points'][1]
-        if x1 > x2: x1, x2 = x2, x1
-        if y1 > y2: y1, y2 = y2, y1
-        
-        bbs.append(BoundingBox(x1, y1, x2, y2, label=shape['label']))
-      bbs = BoundingBoxesOnImage(bbs, shape=img.shape)
-
-      img_aug, tar_aug = AUGSEQ(image=img, bounding_boxes=bbs)
-      tar_aug = tar_aug.clip_out_of_image() # 注意如果bbs变换到图片外，会引起训练yolo warning
-
-      # 保存数据
-      lns = []
-      for bbox in tar_aug:
-        ln = f'{classes[bbox.label]} {bbox.center_x/w} {bbox.center_y/h} {bbox.width/w} {bbox.height/h}' + '\n'
-        lns.append(ln)
+    # 保存数据
+    lns = []
+    for bbox in tar_aug:
+      ln = f'{classes[bbox.label]} {bbox.center_x/w} {bbox.center_y/h} {bbox.width/w} {bbox.height/h}' + '\n'
+      lns.append(ln)
 
     if save:
       cv2.imwrite(image_tar, img_aug)

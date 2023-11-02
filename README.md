@@ -488,10 +488,11 @@ python segment/train.py \
   --batch 320 \
   --epochs 1000 \
   --data tarball-seg256.yaml \
-  --weights runs/train-seg/tarball-seg256/weights/best.pt  \
-  --name seg256_20230822  \
+  --weights yolov5n-seg.pt  \
+  --name seg256_231102  \
   --optimizer AdamW
 
+# 128的seg训练，已不再使用
 python segment/train.py --img 128 --batch 320 --epochs 1000 --data tarball-seg.yaml --weights runs/train-seg/tarball-seg2/weights/best.pt --name tarball-seg  --optimizer AdamW 
 ```
 
