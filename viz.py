@@ -27,6 +27,8 @@ if __name__ == '__main__':
       for j, label in enumerate(labels):
         lbs = [_ for _ in label.split()]
         cls = int(lbs[0])
+        # if cls != 4: continue
+
         color = COLORS[j % len(COLORS)]
         if seg:
           pts = np.array([float(_) for _ in lbs[1:]]).reshape((-1, 2))

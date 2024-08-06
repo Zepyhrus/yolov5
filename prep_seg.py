@@ -32,9 +32,9 @@ AUGSEQ = iaa.SomeOf(3, [
 
 
 if __name__ == '__main__':
-  prj = 'tarball-seg256'
+  prj = 'seg512'
   seg = True
-  aug_ratio = 10
+  aug_ratio = 50
   save = True
   itp_num = 32  # 对圆的插值点数
   ratio_bg = 0.25
@@ -58,7 +58,7 @@ if __name__ == '__main__':
   for j in tqdm(range(steps)):
     # 准备数据
     label = random.choice(labels)
-    # if not '0000040' in label: continue # 筛选想看的图片
+    # if not '00001020' in label:  continue # 筛选想看的图片
     lb = sload(label)
     img = cv2.imread(label.replace('.json', '.png'))
     h, w, *_ = img.shape
@@ -129,7 +129,7 @@ if __name__ == '__main__':
       cls = classes[kps_all[i]['cls']]
       kp = tar_aug[st:st+kps_all[i]['len']]
 
-      cords = np.array([[_.x, _.y] for _ in kp])
+      cords = np.array([[_.x, _.y] for _ in kp], dtype=np.float64)
       cords[:, 0] /= w
       cords[:, 1] /= h
 
@@ -174,12 +174,7 @@ if __name__ == '__main__':
           pts = np.array([float(_) for _ in lbs[1:]]).reshape((-1, 2))
           pts[:, 0] *= w
           pts[:, 1] *= h
-          if cls == 0:
-            color_seg = (0, 255, 255) # 圆
-          elif cls == 4:
-            color_seg = (0, 255, 0) # side
-          elif cls == 5:
-            color_seg = (0, 0, 255)
+          color_seg = COLORS[cls]
           
           cv2.drawContours(img, [pts[:, None, :].astype(np.int32)], 0, color=color_seg, thickness=2)
         else:

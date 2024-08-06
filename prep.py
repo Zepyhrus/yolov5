@@ -16,12 +16,12 @@ from urx.constants import COLORS
 
 AUGSEQ = iaa.SomeOf(3, [
   iaa.Multiply((0.75, 1.25)), # change brightness, doesn't affect BBs
-  iaa.Affine(
-    translate_percent=0.1,
-    scale=(0.75, 1.25),
-    rotate=(-180, 180),
-    shear=(-45, 45),
-  ),
+  # iaa.Affine( # 对于目标检测，尽量少用affine
+  #   translate_percent=0.1,
+  #   scale=(0.75, 1.25),
+  #   rotate=(-180, 180),
+  #   shear=(-45, 45),
+  # ),
   iaa.Fliplr(0.25),
   iaa.Flipud(0.25),
   iaa.CoarseDropout(per_channel=True),
@@ -32,9 +32,9 @@ AUGSEQ = iaa.SomeOf(3, [
 
 
 if __name__ == '__main__':
-  prj = 'asher'
+  prj = 'turbo'
   seg = False
-  aug_ratio = 20
+  aug_ratio = 10
   save = True
   itp_num = 32  # 对圆的插值点数
   ratio_bg = 0.25
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     h, w, *_ = img.shape
 
     # 生成新的数据
-    tar = 'train' if j < 0.95*aug_ratio*len(labels)  else 'val' # 最后5%作为验证集
+    tar = 'train' if j < 0.9*aug_ratio*len(labels)  else 'val' # 10%作为验证集
     tar_images_folder = f'data/{prj}/images/{tar}'
     tar_labels_folder = f'data/{prj}/labels/{tar}'
     os.makedirs(tar_images_folder, exist_ok=True)
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     # ------------------------------------------- Bounding box ----------------------------------
     bbs = []
     for shape in lb['shapes']:
-      assert shape['shape_type'] == 'rectangle'
+      if shape['shape_type'] != 'rectangle': continue
 
       x1, y1 = shape['points'][0]
       x2, y2 = shape['points'][1]
@@ -135,27 +135,17 @@ if __name__ == '__main__':
       for j, label in enumerate(labels):
         lbs = [_ for _ in label.split()]
         cls = int(lbs[0])
-        color = COLORS[j % len(COLORS)]
-        if seg:
-          pts = np.array([float(_) for _ in lbs[1:]]).reshape((-1, 2))
-          pts[:, 0] *= w
-          pts[:, 1] *= h
-          if cls == 0:
-            color_seg = (0, 255, 255) # 圆
-          elif cls == 4:
-            color_seg = (0, 255, 0) # side
-          elif cls == 5:
-            color_seg = (0, 0, 255)
-          
-          cv2.drawContours(img, [pts[:, None, :].astype(np.int32)], 0, color=color_seg, thickness=2)
-        else:
-          cx, cy, tw, th = [float(_) for _ in lbs[1:]]
-          lux = int((cx-tw/2) * w)
-          luy = int((cy-th/2) * h)
-          rbx = int((cx+tw/2) * w)
-          rby = int((cy+th/2) * h)
+        color = COLORS[cls]
+        
+        cx, cy, tw, th = [float(_) for _ in lbs[1:]]
+        lux = int((cx-tw/2) * w)
+        luy = int((cy-th/2) * h)
+        rbx = int((cx+tw/2) * w)
+        rby = int((cy+th/2) * h)
 
-          rectangle(img, (lux, luy, rbx, rby), color)
+        rectangle(img, (lux, luy, rbx, rby), color)
+        cv2.putText(img, str(cls), (lux, luy), 0, 1.0, color, 2)
+
 
     cv2.imshow('_', img)
     if cv2.waitKey(0) == 27: break

@@ -1,4 +1,4 @@
-path: data/asher
+path: data/seg512
 train: images/train
 val: images/val
 names:
@@ -6,5 +6,7 @@ names:
   1: chessboard
   2: arucoboard
   3: nbwl
-  4: tbar
-  5: pbar
+  4: side
+  5: top
+  6: body
+  7: upper

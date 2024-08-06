@@ -10,6 +10,9 @@ data/tarball-seg
 data/tarball-seg256
 data/coco128-seg
 data/tbc
+data/seg512
+data/turbo
+
 
 runs/*
 backup
