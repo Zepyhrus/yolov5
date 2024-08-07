@@ -12,7 +12,7 @@ from imgaug.augmentables import Keypoint, KeypointsOnImage
 
 from urx.toolbox import sload
 from urx.imgbox import rectangle
-from urx.constants import COLORS
+from urx.colors import COLORS
 
 AUGSEQ = iaa.SomeOf(3, [
   iaa.Multiply((0.75, 1.25)), # change brightness, doesn't affect BBs
@@ -32,6 +32,7 @@ AUGSEQ = iaa.SomeOf(3, [
 
 
 if __name__ == '__main__':
+  base_dir = 'D:\\Datasets'
   prj = 'turbo'
   seg = False
   aug_ratio = 10
@@ -44,10 +45,10 @@ if __name__ == '__main__':
   for k, v in cfg['names'].items():
     classes[v] = k
 
-  images_n = glob(f'/home/ubuntu/Datasets/train2017/*.jpg')
+  images_n = glob(f'{base_dir}/train2017/*.jpg')
   assert len(images_n), "No negative backgrounds found!"
   
-  labels = glob(f'/home/ubuntu/Datasets/{prj}/*.json')
+  labels = glob(f'{base_dir}/{prj}/*.json')
   random.shuffle(labels)
   # imgs = [cv2.imread(_.replace('.json', '.png')) for _ in labels]
   

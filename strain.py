@@ -127,7 +127,7 @@ if __name__ == "__main__":
     # }
     args = {
       'data': 'turbo.yaml',
-      'name': 'turbo240319',
+      'name': 'turbo240807',
     #   'data': 'asher.yaml',
     #   'name': 'asher240221',
       'imgsz': 640,
