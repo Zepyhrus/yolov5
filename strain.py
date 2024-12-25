@@ -129,7 +129,8 @@ if __name__ == "__main__":
       'data': 'asher.yaml',
       'name': 'asher',
       'imgsz': 640,
-      'weights': 'runs/train/asher20230526/weights/best.pt', # 'yolov5s.pt',
+    #   'weights': 'runs/train/asher20230526/weights/best.pt', 
+      'weights': 'yolov5s.pt',
       'epochs': 500,
       'device': 0,
       # 'freeze': [20], # 冻结20及以后的网络，冻结效果并不好
@@ -384,7 +385,7 @@ if __name__ == "__main__":
                     imgs = nn.functional.interpolate(imgs, size=ns, mode='bilinear', align_corners=False)
 
             # Forward
-            with torch.cuda.amp.autocast(amp):
+            with torch.amp.autocast(amp):
                 pred = model(imgs)  # forward
                 loss, loss_items = compute_loss(pred, targets.to(device))  # loss scaled by batch_size
                 if opt.quad:

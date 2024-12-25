@@ -10,8 +10,9 @@ import imgaug.augmenters as iaa
 from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
 from imgaug.augmentables import Keypoint, KeypointsOnImage
 
-from urx.toolbox import sload, rectangle
-from urx.constants import COLORS
+from urx.toolbox import sload
+from urx.imgbox import rectangle
+from urx.colors import COLORS
 
 AUGSEQ = iaa.SomeOf(3, [
   iaa.Multiply((0.75, 1.25)), # change brightness, doesn't affect BBs
@@ -33,7 +34,7 @@ AUGSEQ = iaa.SomeOf(3, [
 if __name__ == '__main__':
   prj = 'asher'
   seg = 'seg' in prj
-  aug_ratio = 20 if seg else 20
+  aug_ratio = 20 if seg else 5
   save = True
   itp_num = 32  # 对圆的插值点数
   ratio_bg = 0.25
@@ -43,7 +44,7 @@ if __name__ == '__main__':
   for k, v in cfg['names'].items():
     classes[v] = k
 
-  images_n = glob(f'/media/ubuntu/Sherk2T/Datasets/COCO/2017/train2017/*.jpg')
+  images_n = glob(f'/media/user/Sherk2T/Datasets/COCO/2017/train2017/*.jpg')
   assert len(images_n), "No negative backgrounds found!"
   labels = glob(f'data/{prj}/*.json')
   random.shuffle(labels)

@@ -1,12 +1,17 @@
 __pycache__/
 
 data/asher
+data/asher_pbar
 data/coco128
+data/coco128-seg
 data/tarball
 data/tarball-seg
 data/tarball-seg256
-data/coco128-seg
+data/tarball-seg256_collection
+data/turbo
+data/turbo_collect
 data/tbc
+data/seg512
 runs/*
 backup
 *.pt
