@@ -135,7 +135,7 @@ if __name__ == "__main__":
       'device': 0,
       # 'freeze': [20], # 冻结20及以后的网络，冻结效果并不好
       'optimizer': 'AdamW',
-      'batch_size': 32,
+      'batch_size': 128,
       'single_cls': False,
       # 'resume': False,
       'cos_lr': False,
@@ -385,7 +385,7 @@ if __name__ == "__main__":
                     imgs = nn.functional.interpolate(imgs, size=ns, mode='bilinear', align_corners=False)
 
             # Forward
-            with torch.amp.autocast(amp):
+            with torch.cuda.amp.autocast(amp):
                 pred = model(imgs)  # forward
                 loss, loss_items = compute_loss(pred, targets.to(device))  # loss scaled by batch_size
                 if opt.quad:
