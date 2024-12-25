@@ -1,4 +1,7 @@
 __pycache__/
+*.py[cod]
+*$py.class
+
 
 data/asher
 data/asher_pbar
@@ -14,4 +17,5 @@ data/tbc
 data/seg512
 runs/*
 backup
+.backup
 *.pt

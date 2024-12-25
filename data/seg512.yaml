@@ -1,4 +1,4 @@
-path: data/tarball-seg256
+path: data/seg512
 train: images/train
 val: images/val
 names:

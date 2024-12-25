@@ -126,8 +126,10 @@ if __name__ == "__main__":
     #   'cos_lr': True,
     # }
     args = {
-      'data': 'asher.yaml',
-      'name': 'asher',
+      'data': 'turbo.yaml',
+      'name': 'turbo240807',
+    #   'data': 'asher.yaml',
+    #   'name': 'asher240221',
       'imgsz': 640,
     #   'weights': 'runs/train/asher20230526/weights/best.pt', 
       'weights': 'yolov5s.pt',
@@ -138,7 +140,7 @@ if __name__ == "__main__":
       'batch_size': 128,
       'single_cls': False,
       # 'resume': False,
-      'cos_lr': False,
+      'cos_lr': True,
       # 'patience': 0,
     }
 

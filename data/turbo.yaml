@@ -1,0 +1,7 @@
+path: data/turbo
+train: images/train
+val: images/val
+names:
+  0: tip
+  1: broken_tip
+  2: pifeng

@@ -482,9 +482,28 @@ For YOLOv5 bugs and feature requests please visit [GitHub Issues](https://github
 ## Sherk
 
 ```bash
-# batch 160 consumes 1.63G GPU, around 110s, 
-python segment/train.py --img 256 --batch 320 --epochs 1000 --data tarball-seg256.yaml --weights yolov5n-seg.pt  --name tarball-seg256  --optimizer AdamW --cos-lr
+# batch 80 consumes 9.16G GPU, around 14s/epcho, yolov5n-seg
+# 
+python segment/train.py \
+  --img 512 \
+  --batch 80 \
+  --epochs 1000 \
+  --data seg512.yaml \
+  --weights yolov5n-seg.pt  \
+  --name seg512_240620  \
+  --optimizer AdamW
 
+# batch 160 consumes 1.63G GPU, around 110s, 
+python segment/train.py \
+  --img 256 \
+  --batch 320 \
+  --epochs 1000 \
+  --data tarball-seg256.yaml \
+  --weights yolov5n-seg.pt  \
+  --name seg256_240221  \
+  --optimizer AdamW
+
+# 128的seg训练，已不再使用
 python segment/train.py --img 128 --batch 320 --epochs 1000 --data tarball-seg.yaml --weights runs/train-seg/tarball-seg2/weights/best.pt --name tarball-seg  --optimizer AdamW 
 ```
 

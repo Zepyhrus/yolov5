@@ -3,11 +3,12 @@ from os.path import join, basename
 import cv2, numpy as np
 
 from glob import glob
-from urx.toolbox import sload, rectangle
+from urx.toolbox import sload
+from urx.imgbox import rectangle
 from urx.constants import COLORS
 
 if __name__ == '__main__':
-  tar = 'tarball-seg256'
+  tar = 'asher'
   seg = 'seg' in tar
   cfg = sload(f'data/{tar}.yaml')
   images = sorted(glob(f'data/{tar}/{cfg["train"]}/*.png'))
@@ -26,6 +27,8 @@ if __name__ == '__main__':
       for j, label in enumerate(labels):
         lbs = [_ for _ in label.split()]
         cls = int(lbs[0])
+        # if cls != 4: continue
+
         color = COLORS[j % len(COLORS)]
         if seg:
           pts = np.array([float(_) for _ in lbs[1:]]).reshape((-1, 2))
