@@ -12,7 +12,7 @@ from imgaug.augmentables import Keypoint, KeypointsOnImage
 
 from urx.toolbox import sload
 from urx.imgbox import rectangle
-from urx.constants import COLORS
+from urx.colors import COLORS
 
 AUGSEQ = iaa.SomeOf(3, [
   iaa.Multiply((0.75, 1.25)), # change brightness, doesn't affect BBs

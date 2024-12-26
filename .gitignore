@@ -15,7 +15,7 @@ data/turbo
 data/turbo_collect
 data/tbc
 data/seg512
+data/faces*
+
 runs/*
-backup
-.backup
 *.pt
