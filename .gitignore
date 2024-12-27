@@ -19,3 +19,5 @@ data/faces*
 
 runs/*
 *.pt
+
+bg_no_face/

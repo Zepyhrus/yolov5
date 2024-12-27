@@ -519,3 +519,8 @@ python segment/train.py --img 128 --batch 320 --epochs 1000 --data tarball-seg.y
 
 
 
+```bash
+ln -sf /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /home/user/anaconda3/envs/openmmlab/lib/libstdc++.so.6
+
+ln -sf /usr/lib/x86_64-linux-gnu/libstdc++.so.6 ${CONDA_PREFIX}/lib/libstdc++.so.6
+```
