@@ -507,8 +507,8 @@ python segment/train.py \
 python segment/train.py --img 128 --batch 320 --epochs 1000 --data tarball-seg.yaml --weights runs/train-seg/tarball-seg2/weights/best.pt --name tarball-seg  --optimizer AdamW 
 
 
-# face seg train
-python segment/train.py --img 256 --batch 500 --epochs 1000 --data faces.yaml --weights yolov5n-seg.pt --name face241230  --optimizer AdamW --single-cls
+# face seg train: Single class, 500 batch size for 12.4G memory
+python segment/train.py --img 256 --batch 500 --epochs 1000 --data faces.yaml --weights yolov5n-seg.pt --name face241230  --optimizer AdamW --single-cls --no-overlap
 
 ```
 

@@ -115,6 +115,7 @@ if __name__ == '__main__':
       cords = np.array([[_.x, _.y] for _ in kp], dtype=np.float64)
       cords[:, 0] /= w
       cords[:, 1] /= h
+      cords = np.clip(cords, a_min=0., a_max=1.)
 
       ln = ' '.join([str(_) for _ in [cls]+cords.flatten().tolist()]) + '\n'
       lns.append(ln)
