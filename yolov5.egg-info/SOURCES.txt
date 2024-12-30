@@ -21,6 +21,7 @@ utils/metrics.py
 utils/plots.py
 utils/torch_utils.py
 utils/triton.py
+yolov5/__init__.py
 yolov5.egg-info/PKG-INFO
 yolov5.egg-info/SOURCES.txt
 yolov5.egg-info/dependency_links.txt
