@@ -49,10 +49,10 @@ from utils.torch_utils import select_device, smart_inference_mode
 
 
 if __name__ == "__main__":
-  weights = '/home/ubuntu/App/yolov5/runs/train-seg/exp2/weights/best.pt'
-  source = '/home/ubuntu/App/PaleCrane/data/tarball/color2/*.png'
-  data = 'data/coco128.yaml'
-  imgsz = (128, 128)
+  weights = 'runs/train-seg/face241230/weights/best.pt'
+  source = 'data/faces/*.jpg'
+  data = 'data/faces.yaml'
+  imgsz = (256,256)
   conf_thres = 0.25
   iou_thres = 0.45
   max_det = 1000

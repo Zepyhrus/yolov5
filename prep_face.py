@@ -103,8 +103,7 @@ if __name__ == '__main__':
 
     # 数据增强
     img_aug, tar_aug = AUGSEQ(image=img, keypoints=kps)
-    # tar_aug = tar_aug.clip_out_of_image() # 注意如果bbs变换到图片外，会引起训练yolo warning
-
+    
     # 保存数据
     st = 0
     lns = []
@@ -115,7 +114,7 @@ if __name__ == '__main__':
       cords = np.array([[_.x, _.y] for _ in kp], dtype=np.float64)
       cords[:, 0] /= w
       cords[:, 1] /= h
-      cords = np.clip(cords, a_min=0., a_max=1.)
+      cords = np.clip(cords, a_min=0., a_max=1.) # 注意如果bbs变换到图片外，会引起训练yolo warning
 
       ln = ' '.join([str(_) for _ in [cls]+cords.flatten().tolist()]) + '\n'
       lns.append(ln)
