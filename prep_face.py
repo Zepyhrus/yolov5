@@ -34,7 +34,7 @@ AUGSEQ = iaa.SomeOf(3, [
 if __name__ == '__main__':
   prj = 'faces'
   seg = True
-  aug_ratio = 1
+  aug_ratio = 10
   save = True
   itp_num = 32  # 对圆的插值点数
   ratio_bg = 0.25
@@ -89,24 +89,7 @@ if __name__ == '__main__':
     kps_all = []
     kps = []
     for shape in lb['shapes']:
-      if shape['label'] == 'tarball': # tarball的球形插值
-        if shape['shape_type'] == 'rectangle':
-          x1, y1 = shape['points'][0]
-          x2, y2 = shape['points'][1]
-
-          a, b = (x2-x1)/2, (y2-y1)/2
-          xc, yc = (x2+x1)/2, (y2+y1)/2
-        elif shape['shape_type'] == 'circle':
-          xc, yc = shape['points'][0]
-          xt, yt = shape['points'][1]
-          a = b = np.sqrt((xt-xc)**2+(yt-yc)**2)
-        else:
-          raise Exception(f'Wrong shape type {shape["shape_type"]}')
-        theta = np.arange(itp_num) * 2*np.pi / itp_num
-
-        xs = (np.cos(theta)*a + xc)
-        ys = (np.sin(theta)*b + yc)
-      elif shape['label'] in ['side', 'top', 'body', 'upper']: # tbar的多边形mask
+      if shape['label'] == 'face': # face
         xs = [_[0] for _ in shape['points']]
         ys = [_[1] for _ in shape['points']]
       else:

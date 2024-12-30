@@ -11,11 +11,14 @@ from utils.torch_utils import select_device
 
 if __name__ == "__main__":
     dir_data = 'data/asher'
-    images =  glob(f'{dir_data}/*.png')
+    # images =  glob(f'{dir_data}/*.png')
+    images = glob('/media/user/Sherk2T/Datasets/COCO/2017/train2017/*.jpg')
     print(len(images))
 
-    name = 'asher202303202'
-    weights = f'runs/train/{name}/weights/best.pt'
+    # name = 'asher202303202'
+    # weights = f'runs/train/{name}/weights/best.pt'
+
+    weights = f'models/yolov5s.pt'
     nosave = False
     project = './runs/detect'
     exist_ok = True
@@ -24,7 +27,7 @@ if __name__ == "__main__":
     data = f'{dir_data}.yaml'
     dnn = False
     half = False
-    imgsz = (640, 640)
+    imgsz = (640, 480)
     vid_stride = 1
     augment = False
     conf_thres = 0.5
@@ -48,7 +51,8 @@ if __name__ == "__main__":
     # Run inference
     model.warmup(imgsz=(1, 3, *imgsz))  # warmup
     for image in images:
-        im0s = cv2.imread(image)
+        img_ori = cv2.imread(image)
+        im0s = cv2.resize(img_ori, imgsz)
         im = im0s.transpose((2, 0, 1))
 
         im = torch.from_numpy(im).to(model.device)
@@ -74,7 +78,8 @@ if __name__ == "__main__":
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
                     c = int(cls)  # integer class
-                    # label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
+                    if c: continue
+
                     ulx, uly, brx, bry = [int(_) for _ in xyxy]
                     cx = int((xyxy[0] + xyxy[2]) / 2)
                     cy = int((xyxy[1] + xyxy[3]) / 2)

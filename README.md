@@ -505,6 +505,11 @@ python segment/train.py \
 
 # 128的seg训练，已不再使用
 python segment/train.py --img 128 --batch 320 --epochs 1000 --data tarball-seg.yaml --weights runs/train-seg/tarball-seg2/weights/best.pt --name tarball-seg  --optimizer AdamW 
+
+
+# face seg train
+python segment/train.py --img 256 --batch 500 --epochs 1000 --data faces.yaml --weights yolov5n-seg.pt --name face241230  --optimizer AdamW --single-cls
+
 ```
 
 ### 1. 数据增强
