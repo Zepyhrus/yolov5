@@ -508,7 +508,7 @@ python segment/train.py --img 128 --batch 320 --epochs 1000 --data tarball-seg.y
 
 
 # face seg train: Single class, 500 batch size for 12.4G memory
-python segment/train.py --img 256 --batch 500 --epochs 1000 --data faces.yaml --weights yolov5n-seg.pt --name face241230  --optimizer AdamW --single-cls --no-overlap
+python segment/train.py --img 640 --batch 160 --epochs 1000 --data faces.yaml --weights yolov5n-seg.pt --name face640  --optimizer AdamW --single-cls
 
 ```
 
