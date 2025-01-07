@@ -34,9 +34,9 @@ AUGSEQ = iaa.SomeOf(3, [
 if __name__ == '__main__':
   prj = 'faces'
   seg = True
-  aug_ratio = 10
+  aug_ratio = 20
   save = True
-  itp_num = 32  # 对圆的插值点数
+  # itp_num = 32  # 对圆的插值点数
   ratio_bg = 0.25
 
   
@@ -45,7 +45,7 @@ if __name__ == '__main__':
   for k, v in cfg['names'].items():
     classes[v] = k
 
-  images_n = glob(f'bg_no_face/*.jpg')
+  images_n = glob(f'data/bg_no_face/*.jpg')
   assert len(images_n), "No negative backgrounds found!"
   
   labels = glob(f'data/{prj}/*.json')

@@ -508,7 +508,7 @@ python segment/train.py --img 128 --batch 320 --epochs 1000 --data tarball-seg.y
 
 
 # face seg train: Single class, 500 batch size for 12.4G memory
-python segment/train.py --img 640 --batch 160 --epochs 1000 --data faces.yaml --weights yolov5n-seg.pt --name face640  --optimizer AdamW --single-cls
+python segment/train.py --img 640 --batch 160 --epochs 1000 --data faces.yaml --weights models/yolov5n-seg.pt --name face640_250102  --optimizer AdamW --single-cls
 
 ```
 
@@ -520,6 +520,10 @@ python segment/train.py --img 640 --batch 160 --epochs 1000 --data faces.yaml --
 
 1. 通常来说250个epoch不能够获得最好的模型，500比较理想；
 2. `cos_lr` 可以加速收敛，但是会在训练过程的后面导致不稳定；
+
+#### 2.1 Benchmark
+
+1. face640_250102: Using 20 videos
 
 
 
